@@ -1,6 +1,6 @@
-import { Router } from "express";
 import express from "express";
 import connection from "../config/db.js";
+import { connect } from "../data-source/index.js";
 import { validation } from "../helpers/userValidation.js";
 
 const router = express.Router();
@@ -13,43 +13,46 @@ router.post("/customers", (req, res) => {
   }
 
   try {
-    const q = "INSERT INTO customers (name, password) VALUES (?, ?)";
+    const q = "INSERT INTO customers (name, email, password) VALUES (?, ?, ?)";
 
     const values = [req.body.name, req.body.email, req.body.password];
 
-    connection.query(q, values, (err, data) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ error: "Internal Server Error" });
-      }
-      return res.status(201).json({ success: "Customer added successfully" });
-    });
+
+    connect(q, values, res, "Customer Added Successfully");
   } catch (error) {
     return res.status(500).json(error.message);
   }
 });
 
 router.get("/customers", (req, res) => {
-  connection.query("SELECT * FROM customers", function (err, results) {
-    return res.status(200).json({ message: results });
-  });
+  const newQuery = "SELECT * FROM customers";
+
+  connect(newQuery, "", res, "Getting All Customers");
 });
 
-export default router;
+router.get("/customers/:id", (req, res) => {
+  const idParam = req.params.id;
+
+  const newQuery = `SELECT * FROM customers WHERE id = ${idParam}`;
+  connect(newQuery, "", res, "Customer Added Successfully");
+});
 
 router.delete("/customers/:id", (req, res) => {
   const idParam = req.params.id;
   const q = `DELETE FROM customers WHERE id = ${idParam}`;
 
-  connection.query(q, (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: "Internal Server Error" });
-    }
-    return res.status(201).json({ success: "Customer deleted successfully" });
-  });
+  connect(q, "", res, "Customer Deleted Successfully");
 });
 
-router.update("/customers/:id", (req, res) => {
-  
-})
+router.put("/customers/:id", (req, res) => {
+  const idParam = req.params.id;
+  const values = [req.body.name, req.body.email, req.body.password, idParam];
+
+  const q = `UPDATE customers
+    SET name = ?, email = ?, password = ?
+    WHERE id = ?`;
+
+  connect(q, values, res, "Customer Updated Successfully");
+});
+
+export default router;
