@@ -1,22 +1,30 @@
 import express from "express";
-import connection from "../config/db.js";
+import bcrypt from "bcryptjs";
 import { connect } from "../data-source/index.js";
-import { validation } from "../helpers/userValidation.js";
+import { validation, emailFormat } from "../helpers/userValidation.js";
 
 const router = express.Router();
 
-router.post("/customers", (req, res) => {
+router.post("/customers", async (req, res) => {
   const message = validation(req.body);
 
   if (message) {
     return res.status(400).json({ message });
   }
 
+  const emailMessage = emailFormat(req.body.email);
+
+  if (emailMessage) {
+    return res.status(400).json({ emailMessage });
+  }
+
   try {
     const q = "INSERT INTO customers (name, email, password) VALUES (?, ?, ?)";
 
-    const values = [req.body.name, req.body.email, req.body.password];
+    const salt = await bcrypt.genSalt(10);
+    const encryptedPassword = await bcrypt.hash(req.body.password, salt);
 
+    const values = [req.body.name, req.body.email, encryptedPassword];
 
     connect(q, values, res, "Customer Added Successfully");
   } catch (error) {

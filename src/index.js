@@ -6,6 +6,9 @@ import customersRouter from "./routes/customers.js";
 import loginRouter from "./routes/auth.js";
 import locateBookRouter from "./routes/locate-book.js";
 import ordersRouter from "./routes/orders.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 
