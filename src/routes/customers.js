@@ -17,7 +17,7 @@ router.post("/customers", async (req, res) => {
   if (emailMessage) {
     return res.status(400).json({ emailMessage });
   }
-
+  
   try {
     const q = "INSERT INTO customers (name, email, password) VALUES (?, ?, ?)";
 

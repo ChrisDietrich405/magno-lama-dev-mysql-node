@@ -12,8 +12,8 @@ router.post("/books", (req, res) => {
     return res.status(400).json({ message });
   }
 
-  const q = "INSERT INTO books (name, cover) VALUES (?, ?)";
-  const values = [req.body.name, req.body.cover];
+  const q = "INSERT INTO books (name, price) VALUES (?, ?)";
+  const values = [req.body.name, req.body.price];
 
   connect(q, values, res, "Book added");
 });
