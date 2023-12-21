@@ -11,3 +11,9 @@ export const emailFormat = (email) => {
     return "incorrect email format";
   }
 };
+
+export const paramPresent = (id) => {
+  if (!id) {
+    return "Please add customer id";
+  }
+};

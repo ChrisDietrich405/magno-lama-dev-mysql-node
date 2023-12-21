@@ -1,7 +1,7 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import { connect } from "../data-source/index.js";
-import { validation, emailFormat } from "../helpers/userValidation.js";
+import { validation, emailFormat, paramPresent } from "../helpers/userValidation.js";
 
 const router = express.Router();
 
@@ -17,7 +17,7 @@ router.post("/customers", async (req, res) => {
   if (emailMessage) {
     return res.status(400).json({ emailMessage });
   }
-  
+
   try {
     const q = "INSERT INTO customers (name, email, password) VALUES (?, ?, ?)";
 
@@ -33,28 +33,41 @@ router.post("/customers", async (req, res) => {
 });
 
 router.get("/customers", (req, res) => {
-  const newQuery = "SELECT * FROM customers";
+  const q = "SELECT * FROM customers";
 
-  connect(newQuery, "", res, "Getting All Customers");
+  connect(q, "", res, "Getting All Customers");
 });
 
-router.get("/customers/:id", (req, res) => {
+router.get("/list-individual-customer/:id", (req, res) => {
+  const message = presentParam(req.params.id);
+
+  if (message) {
+    return res.status(400).json({ message });
+  }
   const idParam = req.params.id;
 
-  const newQuery = `SELECT * FROM customers WHERE id = ${idParam}`;
-  connect(newQuery, "", res, "Customer Added Successfully");
+  // if (!idParam) {
+  //   return res.status(400).json("Please add customer id");
+  // }
+
+  const q = `SELECT * FROM customers WHERE id = ${idParam}`;
+  connect(q, "", res, "Customer Added Successfully");
 });
 
-router.delete("/customers/:id", (req, res) => {
+router.delete("/delete-one-customer/:id", (req, res) => {
   const idParam = req.params.id;
   const q = `DELETE FROM customers WHERE id = ${idParam}`;
 
   connect(q, "", res, "Customer Deleted Successfully");
 });
 
-router.put("/customers/:id", (req, res) => {
+router.put("/update-customer/:id", (req, res) => {
   const idParam = req.params.id;
   const values = [req.body.name, req.body.email, req.body.password, idParam];
+
+  if (!idParam) {
+    return res.status(400).json("Please add customer id");
+  }
 
   const q = `UPDATE customers
     SET name = ?, email = ?, password = ?
@@ -64,3 +77,6 @@ router.put("/customers/:id", (req, res) => {
 });
 
 export default router;
+ 
+
+
