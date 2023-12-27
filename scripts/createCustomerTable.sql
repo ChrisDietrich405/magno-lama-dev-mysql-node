@@ -1,6 +1,10 @@
-CREATE TABLE customers (
-    id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
-    name VARCHAR(45) NOT NULL,
-    email VARCHAR(45) NOT NULL UNIQUE,
-    password VARCHAR(45) NOT NULL
-);
+-- CREATE A VIEW THAT SHOWS ALL CUSTOMERS THAT HAVE TWO OR MORE ORDERS
+
+CREATE VIEW selectCustomersWithManyOrders AS 
+SELECT name, COUNT(customers.id)
+FROM orders
+JOIN customers
+ON orders.customerId = customers.id
+GROUP BY name
+HAVING COUNT(customers.id) > 1
+
