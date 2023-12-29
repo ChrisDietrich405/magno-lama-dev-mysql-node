@@ -5,6 +5,7 @@ import booksRouter from "./routes/books.js";
 import customersRouter from "./routes/customers.js";
 import loginRouter from "./routes/auth.js";
 import ordersRouter from "./routes/orders.js";
+import messagesRouter from "./routes/messages.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -26,6 +27,7 @@ const syncDB = () => {
 
 syncDB();
 
+app.use("/", messagesRouter);
 app.use("/", booksRouter);
 app.use("/", customersRouter);
 app.use("/", loginRouter);

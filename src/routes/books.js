@@ -1,7 +1,13 @@
 import express from "express";
-import connection from "../config/db.js";
 import { validation } from "../helpers/userValidation.js";
 import { connect } from "../data-source/index.js";
+import {
+  addBook,
+  deleteBook,
+  getAllBooks,
+  getBookById,
+  updateBook,
+} from "../repositories/book-repo.js";
 
 const router = express.Router();
 
@@ -12,41 +18,23 @@ router.post("/books", (req, res) => {
     return res.status(400).json({ message });
   }
 
-  const q = "INSERT INTO books (name, price) VALUES (?, ?)";
-  const values = [req.body.name, req.body.price];
-
-  connect(q, values, res, "Book added");
+  addBook(req.body.name, req.body.price, res);
 });
 
 router.get("/list-all-books", (req, res) => {
-  const q = "SELECT * FROM books";
-
-  connect(q, "", res);
+  getAllBooks(res);
 });
 
 router.get("/books/:id", (req, res) => {
-  const idParam = req.params.id;
-
-  const q = `SELECT * FROM books WHERE id = ${idParam}`;
-
-  connect(q, "", res, "Returned specific book");
+  getBookById(req, res);
 });
 
 router.delete("/books/:id", (req, res) => {
-  const idParam = req.params.id;
-  const q = `DELETE FROM books WHERE id = ${idParam}`;
-
-  connect(q, values, res, "Book deleted successfully");
+  deleteBook(req.params.id, res);
 });
 
 router.put("/books/:id", (req, res) => {
-  const idParam = req.params.id;
-  const values = [req.body.name, req.body.cover, idParam];
-  const q = `UPDATE books
-  SET name = ?, cover = ?
-  WHERE id = ?`;
-
-  connect(q, values, res, values);
+  updateBook(req, res);
 });
 
 export default router;

@@ -16,8 +16,6 @@ router.post("/order", auth, (req, res) => {
     req.body.dateOfOrder,
     id
   ];
-
-
   connect(q, values, res, "Order made");
 });
 
@@ -55,3 +53,5 @@ router.get("/list-all-orders-by-each-customer", (req, res) => {
 });
 
 export default router;
+
+

@@ -1,11 +1,17 @@
 import express from "express";
-import bcrypt from "bcryptjs";
-import { connect } from "../data-source/index.js";
+
 import { validation, emailFormat } from "../helpers/userValidation.js";
+import {
+  addCustomer,
+  getAllCustomers,
+  getCustomerById,
+  deleteCustomer,
+  updateCustomer,
+} from "../repositories/customer-repo.js";
 
 const router = express.Router();
 
-router.post("/customers", async (req, res) => {
+router.post("/customers", (req, res) => {
   const message = validation(req.body);
 
   if (message) {
@@ -18,51 +24,23 @@ router.post("/customers", async (req, res) => {
     return res.status(400).json({ emailMessage });
   }
 
-  try {
-    const q = "INSERT INTO customers (name, email, password) VALUES (?, ?, ?)";
-
-    const salt = await bcrypt.genSalt(10);
-    const encryptedPassword = await bcrypt.hash(req.body.password, salt);
-
-    const values = [req.body.name, req.body.email, encryptedPassword];
-
-    console.log("VALUES", values);
-
-    connect(q, values, res, "Customer Added Successfully");
-  } catch (error) {
-    return res.status(500).json(error.message);
-  }
+  addCustomer(req.body.name, req.body.email, req.body.password, res);
 });
 
 router.get("/customers", (req, res) => {
-  const newQuery = "SELECT * FROM customers";
-
-  connect(newQuery, "", res, "Getting All Customers");
+  getAllCustomers(req, res);
 });
 
 router.get("/customers/:id", (req, res) => {
-  const idParam = req.params.id;
-
-  const newQuery = `SELECT * FROM customers WHERE id = ${idParam}`;
-  connect(newQuery, "", res, "Customer Added Successfully");
+  getCustomerById(req, res);
 });
 
 router.delete("/customers/:id", (req, res) => {
-  const idParam = req.params.id;
-  const q = `DELETE FROM customers WHERE id = ${idParam}`;
-
-  connect(q, "", res, "Customer Deleted Successfully");
+  deleteCustomer(req, res);
 });
 
 router.put("/customers/:id", (req, res) => {
-  const idParam = req.params.id;
-  const values = [req.body.name, req.body.email, req.body.password, idParam];
-
-  const q = `UPDATE customers
-    SET name = ?, email = ?, password = ?
-    WHERE id = ?`;
-
-  connect(q, values, res, "Customer Updated Successfully");
+  updateCustomer(req, res);
 });
 
 export default router;
