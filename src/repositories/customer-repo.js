@@ -1,5 +1,6 @@
 import { connect } from "../data-source/index.js";
 import bcrypt from "bcryptjs";
+// import Customer from "../models/customerModel.js";
 
 const addCustomer = async (name, email, password, res) => {
   try {
@@ -16,10 +17,10 @@ const addCustomer = async (name, email, password, res) => {
   }
 };
 
-const getAllCustomers = (req, res) => {
-  const newQuery = "SELECT * FROM customers";
-
-  connect(newQuery, "", res, "Getting All Customers");
+const getAllCustomers = async (req, res) => {
+  res.json("hllo")
+  // const customers = await Customer.findAll();
+  // res.status(200).json({ customers });
 };
 
 const getCustomerById = (req, res) => {
@@ -42,7 +43,7 @@ const updateCustomer = (req, res) => {
   const q = `UPDATE customers
   SET name = ?, email = ?, password = ?
   WHERE id = ?`;
-  
+
   console.log("VALUES", q);
   connect(q, values, res, "Customer Updated Successfully");
 };
