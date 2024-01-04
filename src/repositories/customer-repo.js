@@ -1,6 +1,6 @@
 import { connect } from "../data-source/index.js";
 import bcrypt from "bcryptjs";
-// import Customer from "../models/customerModel.js";
+import Customer from "../models/customerModel.js";
 
 const addCustomer = async (name, email, password, res) => {
   try {
@@ -18,9 +18,8 @@ const addCustomer = async (name, email, password, res) => {
 };
 
 const getAllCustomers = async (req, res) => {
-  res.json("hllo")
-  // const customers = await Customer.findAll();
-  // res.status(200).json({ customers });
+  const customers = await Customer.findAll();
+  res.status(200).json({ customers });
 };
 
 const getCustomerById = (req, res) => {

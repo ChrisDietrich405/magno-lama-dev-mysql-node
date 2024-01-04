@@ -1,9 +1,9 @@
 // models/user.mjs
 
 import { DataTypes } from "sequelize";
-import { Sequelize } from "sequelize";
+import db from "../config/db.js";
 
-const Customer = sequelize.define(
+const Customer = db.define(
   "Customer",
   {
     id: {
@@ -31,9 +31,9 @@ const Customer = sequelize.define(
     },
   },
   {
-    timestamps: false, 
+    timestamps: false,
   }
 );
 
-
+console.log(Customer);
 export default Customer;
