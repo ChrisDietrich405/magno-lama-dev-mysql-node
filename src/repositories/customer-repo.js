@@ -2,16 +2,18 @@ import { connect } from "../data-source/index.js";
 import bcrypt from "bcryptjs";
 import Customer from "../models/customerModel.js";
 
-const addCustomer = async (name, email, password, res) => {
+const addCustomer = async (req, res) => {
+
   try {
-    const q = "INSERT INTO customers (name, email, password) VALUES (?, ?, ?)";
-
     const salt = await bcrypt.genSalt(10);
-    const encryptedPassword = await bcrypt.hash(password, salt);
+    const encryptedPassword = await bcrypt.hash(req.body.password, salt);
 
-    const values = [name, email, encryptedPassword];
-
-    connect(q, values, res, "Customer Added Successfully");
+    const newCustomer = await Customer.create({
+      name: req.body.name,
+      email: req.body.email,
+      password: encryptedPassword,
+    });
+    res.status(201).json(newCustomer);
   } catch (error) {
     return res.status(500).json(error.message);
   }

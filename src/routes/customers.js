@@ -24,7 +24,7 @@ router.post("/customers", (req, res) => {
     return res.status(400).json({ emailMessage });
   }
 
-  addCustomer(req.body.name, req.body.email, req.body.password, res);
+  addCustomer(req, res);
 });
 
 router.get("/customers", (req, res) => {
