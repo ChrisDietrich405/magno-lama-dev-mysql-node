@@ -3,6 +3,8 @@ import {
   addBook,
   getAllBooks,
   getBookById,
+  deleteBook,
+  updateBook,
 } from "../repositories/book-repo.js";
 
 const addBookController = async (req, res) => {
@@ -25,4 +27,20 @@ const getBookByIdController = async (req, res) => {
   return res.status(200).json(foundBook);
 };
 
-export { addBookController, getAllBooksController, getBookByIdController };
+const deleteBookController = async (req, res) => {
+  await deleteBook(req.params.id);
+  return res.status(200).json({ message: "book deleted" });
+};
+
+const updateBookController = async (req, res) => {
+  await updateBook(req.body.name, req.body.price, req.params.id);
+  return res.status(200).json({ message: "book updated" });
+};
+
+export {
+  addBookController,
+  getAllBooksController,
+  getBookByIdController,
+  deleteBookController,
+  updateBookController,
+};

@@ -1,23 +1,11 @@
 import express from "express";
 import { connect } from "../data-source/index.js";
 import auth from "../middleware/auth.js";
+import addOrderController from "../controllers/orders-controller.js";
 
 const router = express.Router();
 
-router.post("/order", auth, (req, res) => {
-  const { id } = req.user;
-
-  const q = `INSERT INTO orders (bookId, customerName, city, dateOfOrder, customerId) VALUES (?,?,?,?,?)`;
-
-  const values = [
-    req.body.bookId,
-    req.body.customerName,
-    req.body.city,
-    req.body.dateOfOrder,
-    id
-  ];
-  connect(q, values, res, "Order made");
-});
+router.post("/order", auth, addOrderController);
 
 router.get("/list-orders-by-customer", auth, (req, res) => {
   const { id } = req.user;
@@ -53,5 +41,3 @@ router.get("/list-all-orders-by-each-customer", (req, res) => {
 });
 
 export default router;
-
-

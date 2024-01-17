@@ -1,17 +1,11 @@
 import express from "express";
 
-import { connect } from "../data-source/index.js";
-import {
-  deleteBook,
-  getAllBooks,
-  getBookById,
-  updateBook,
-} from "../repositories/book-repo.js";
-
 import {
   addBookController,
   getAllBooksController,
   getBookByIdController,
+  deleteBookController,  
+  updateBookController,
 } from "../controllers/book-controller.js";
 
 const router = express.Router();
@@ -22,12 +16,8 @@ router.get("/list-all-books", getAllBooksController);
 
 router.get("/books/:id", getBookByIdController);
 
-router.delete("/books/:id", (req, res) => {
-  deleteBook(req.params.id, res);
-});
+router.delete("/books/:id", deleteBookController);
 
-router.put("/books/:id", (req, res) => {
-  updateBook(req, res);
-});
+router.put("/books/:id", updateBookController);
 
 export default router;

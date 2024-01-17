@@ -1,4 +1,3 @@
-import { connect } from "../data-source/index.js";
 import Book from "../models/bookModel.js";
 
 const addBook = async (name, price) => {
@@ -7,7 +6,6 @@ const addBook = async (name, price) => {
 
 const getAllBooks = async (res) => {
   const allBooks = await Book.findAll();
-
   return allBooks;
 };
 
@@ -16,20 +14,23 @@ const getBookById = async (id) => {
   return findBook;
 };
 
-const deleteBook = (idParam, res) => {
-  const q = `DELETE FROM books WHERE id = ${idParam}`;
-
-  connect(q, "", res, "Book deleted successfully");
+const deleteBook = async (id) => {
+  await Book.destroy({
+    where: {
+      id,
+    },
+  });
 };
 
-const updateBook = (req, res) => {
-  const idParam = req.params.id;
-  const values = [req.body.name, req.body.price, idParam];
-  const q = `UPDATE books
-    SET name = ?, price = ?
-    WHERE id = ?`;
-
-  connect(q, values, res, "Book updated");
+const updateBook = async (name, price, id) => {
+  await Book.update(
+    { name, price },
+    {
+      where: {
+        id,
+      },
+    }
+  );
 };
 
 export { addBook, getAllBooks, getBookById, deleteBook, updateBook };
