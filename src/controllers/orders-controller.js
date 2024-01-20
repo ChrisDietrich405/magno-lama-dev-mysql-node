@@ -1,10 +1,11 @@
 import { addOrder } from "../repositories/orders-repo.js";
 
 const addOrderController = async (req, res) => {
-  const { id } = req.user;
+  const { customerId } = req.user;
 
   const discount = req.body.discount;
   const price = req.body.price;
+  const dateOfOrder = new Date();
 
   if (discount > price) {
     res.status(401).json({ message: "discount is higher than price" });
@@ -13,13 +14,12 @@ const addOrderController = async (req, res) => {
   const finalPrice = price - discount;
 
   const newOrder = await addOrder(
-    id,
-    req.body.customerId,
+    customerId,
     req.body.bookId,
     price,
     discount,
     finalPrice,
-    req.body.dateOfOrder
+    dateOfOrder
   );
   return res.status(201).json({ newOrder });
 };

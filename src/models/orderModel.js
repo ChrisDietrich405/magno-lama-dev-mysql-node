@@ -18,8 +18,16 @@ const Order = db.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    city: {
-      type: DataTypes.STRING,
+    price: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    discount: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    finalPrice: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     dateOfOrder: {

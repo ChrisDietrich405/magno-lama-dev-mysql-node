@@ -1,11 +1,11 @@
 import express from "express";
 import { connect } from "../data-source/index.js";
 import auth from "../middleware/auth.js";
-import addOrderController from "../controllers/orders-controller.js";
+import { addOrderController } from "../controllers/orders-controller.js";
 
 const router = express.Router();
 
-router.post("/order", auth, addOrderController);
+router.post("/orders", addOrderController);
 
 router.get("/list-orders-by-customer", auth, (req, res) => {
   const { id } = req.user;
