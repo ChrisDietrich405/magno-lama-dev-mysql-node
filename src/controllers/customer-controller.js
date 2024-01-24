@@ -16,10 +16,12 @@ const addCustomerController = async (req, res) => {
     return res.status(400).json({ message });
   }
 
-  const emailMessage = emailFormat(req.body.email);
+  if (emailFormatIsIncorrect(req.body.email)) {
+    return res.status(400).json({ message: "Email format incorrect" });
+  }
 
-  if (emailMessage) {
-    return res.status(400).json({ emailMessage });
+  if (emailAlreadyExists(req.body.email)) {
+    return res.status(400).json({ message: "User already exists" });
   }
 
   try {
@@ -33,6 +35,20 @@ const addCustomerController = async (req, res) => {
   } catch (error) {
     return res.status(500).json(error.message);
   }
+};
+
+const emailAlreadyExists = async (email) => {
+  const findUser = await getCustomerByEmail(email);
+
+  if (findUser) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+const emailFormatIsIncorrect = (email) => {
+  return emailFormat(email);
 };
 
 const getAllCustomersController = async (req, res) => {

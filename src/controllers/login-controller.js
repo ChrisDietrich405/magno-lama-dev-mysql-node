@@ -24,16 +24,16 @@ const loginUserController = async (req, res) => {
     req.body.password, // User-provided plaintext password
     findUser.password // Hashed password stored in the database
   );
-
+  
   if (!checkPassword) {
     res.status(401).json({ message: "Invalid credentials" });
   }
 
   const loggedInUser = {
-    id: jwt.sign({ id: findUser.id }, process.env.JWT_SECRET, {
+    token: jwt.sign({ customerId: findUser.id }, process.env.JWT_SECRET, {
       expiresIn: "3d",
     }),
-  };
+  };  
 
   return res.status(201).json(loggedInUser);
 };

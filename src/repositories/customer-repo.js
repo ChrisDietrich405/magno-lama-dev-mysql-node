@@ -1,12 +1,16 @@
 import Customer from "../models/customerModel.js";
 
 const addCustomer = async (name, email, password) => {
-  const newCustomer = await Customer.create({
-    name: name,
-    email: email,
-    password: password,
-  });
-  return newCustomer;
+  try {
+    const newCustomer = await Customer.create({
+      name: name,
+      email: email,
+      password: password,
+    });
+    return newCustomer;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const getAllCustomers = async () => {
@@ -28,7 +32,7 @@ const getCustomerByEmail = async (email) => {
 
 const deleteCustomer = async (id) => {
   await Customer.destroy({ where: { id: id } });
-}
+};
 
 const updateCustomer = async (id, name, email, password) => {
   const updatedCustomer = await Customer.update(

@@ -5,7 +5,7 @@ import { addOrderController } from "../controllers/orders-controller.js";
 
 const router = express.Router();
 
-router.post("/orders", addOrderController);
+router.post("/order", auth, addOrderController);
 
 router.get("/list-orders-by-customer", auth, (req, res) => {
   const { id } = req.user;
