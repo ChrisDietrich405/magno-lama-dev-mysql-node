@@ -20,7 +20,7 @@ const addCustomerController = async (req, res) => {
     return res.status(400).json({ message: "Email format incorrect" });
   }
 
-  if (emailAlreadyExists(req.body.email)) {
+  if (await emailAlreadyExists(req.body.email)) {
     return res.status(400).json({ message: "User already exists" });
   }
 

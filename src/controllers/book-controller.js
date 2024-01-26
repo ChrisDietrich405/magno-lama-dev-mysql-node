@@ -8,13 +8,18 @@ import {
 } from "../repositories/book-repo.js";
 
 const addBookController = async (req, res) => {
-  const message = validation(req.body);
-  if (message) {
-    return res.status(400).json({ message });
-  }
+  messageFunction(req.body, res);
 
   const newBook = await addBook(req.body.name, req.body.price);
   return res.status(201).json(newBook);
+};
+
+const messageFunction = (body, res) => {
+  const message = validation(body);
+  if (message) {
+    return res.status(400).json({ message });
+  }
+  return message;
 };
 
 const getAllBooksController = async (req, res) => {

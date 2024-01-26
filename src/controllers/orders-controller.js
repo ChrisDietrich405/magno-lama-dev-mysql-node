@@ -3,7 +3,6 @@ import { addOrder } from "../repositories/orders-repo.js";
 const addOrderController = async (req, res) => {
   const { customerId } = req.user;
 
-
   const discount = req.body.discount;
   const price = req.body.price;
   const dateOfOrder = new Date();
