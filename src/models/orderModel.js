@@ -26,7 +26,7 @@ const Order = db.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    finalPrice: {
+    final_price: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },

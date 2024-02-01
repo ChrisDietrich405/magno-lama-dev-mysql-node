@@ -34,6 +34,6 @@ async function syncDB() {
 
 syncDB();
 
-app.listen(3000, () => {
+app.listen(3002, () => {
   console.log("server running");
 });

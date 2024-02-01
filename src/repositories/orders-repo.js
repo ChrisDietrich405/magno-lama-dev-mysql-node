@@ -18,4 +18,10 @@ const addOrder = async (
   });
 };
 
-export { addOrder };
+const listOrdersByCustomer = async (id) => {
+ 
+  const findCustomer = await Order.findOne({ where: id });
+  console.log("FindCustomer", findCustomer);
+};
+
+export { addOrder, listOrdersByCustomer };

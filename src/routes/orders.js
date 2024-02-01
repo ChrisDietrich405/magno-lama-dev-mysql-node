@@ -1,19 +1,13 @@
 import express from "express";
 import { connect } from "../data-source/index.js";
 import auth from "../middleware/auth.js";
-import { addOrderController } from "../controllers/orders-controller.js";
+import { addOrderController, listOrdersByCustomerController } from "../controllers/orders-controller.js";
 
 const router = express.Router();
 
 router.post("/order", auth, addOrderController);
 
-router.get("/list-orders-by-customer", auth, (req, res) => {
-  const { id } = req.user;
-
-  const q = `SELECT * FROM orders WHERE(customerId) = ${id}`;
-
-  connect(q, "", res, "all orders from this specific customer");
-});
+router.get("/list-orders-by-customer", auth, listOrdersByCustomerController);
 
 router.get("/list-orders-by-customer-email/", auth, (req, res) => {
   const { id } = req.user;

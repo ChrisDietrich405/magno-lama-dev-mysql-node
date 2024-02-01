@@ -1,6 +1,5 @@
 import { getCustomerByEmail } from "../repositories/customer-repo.js";
 import { emailFormat } from "../helpers/userValidation.js";
-import encryptPassword from "../helpers/encryptPassword.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
