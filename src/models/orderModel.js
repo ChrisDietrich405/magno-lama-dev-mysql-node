@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import db from "../config/db.js";
+import Customer from "./customerModel.js";
 
 const Order = db.define(
   "Order",
@@ -39,5 +40,7 @@ const Order = db.define(
     timestamps: false,
   }
 );
+
+Order.belongsTo(Customer, { foreignKey: 'customerId' });
 
 export default Order;

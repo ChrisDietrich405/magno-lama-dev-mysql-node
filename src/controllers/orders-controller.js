@@ -1,4 +1,8 @@
-import { addOrder, listOrdersByCustomer } from "../repositories/orders-repo.js";
+import {
+  addOrder,
+  listOrdersByCustomer,
+  listOrdersByCustomerEmail,
+} from "../repositories/orders-repo.js";
 
 const addOrderController = async (req, res) => {
   const { customerId } = req.user;
@@ -26,10 +30,22 @@ const addOrderController = async (req, res) => {
 
 const listOrdersByCustomerController = async (req, res) => {
   const { customerId } = req.user;
-  await listOrdersByCustomer();
+  const ordersFound = await listOrdersByCustomer(customerId);
+  return res.status(200).json({ ordersFound });
+};
+
+const listOrdersByCustomerEmailController = async (req, res) => {
+  const { customerEmail } = req.user;
+  const ordersFound = await listOrdersByCustomerEmail(customerEmail);
+  return res.status(200).json({ ordersFound });
+};
+
+const listAllOrdersByEachCustomerController = async (req, res) => {
   
 };
 
-// const q = `SELECT * FROM orders WHERE(customerId) = ${id}`;
-
-export { addOrderController, listOrdersByCustomerController };
+export {
+  addOrderController,
+  listOrdersByCustomerController,
+  listOrdersByCustomerEmailController,
+};

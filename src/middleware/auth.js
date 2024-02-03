@@ -14,7 +14,7 @@ const auth = async (req, res, next) => {
   if (!decodedToken) {
     return res.status(401).json({ message: "Unauthorized" });
   }
-  console.log("ReqUser", decodedToken);
+
 
   req.user = decodedToken;    
 

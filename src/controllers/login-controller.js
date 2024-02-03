@@ -18,9 +18,13 @@ const loginUserController = async (req, res) => {
   await checkPasswordFunction(req.body.password, findUser, res);
 
   const loggedInUser = {
-    token: jwt.sign({ customerId: findUser.id }, process.env.JWT_SECRET, {
-      expiresIn: "3d",
-    }),
+    token: jwt.sign(
+      { customerId: findUser.id, customerEmail: findUser.email },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "3d",
+      }
+    ),
   };
 
   return res.status(201).json(loggedInUser);

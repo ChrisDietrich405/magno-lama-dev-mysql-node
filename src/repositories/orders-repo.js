@@ -1,4 +1,5 @@
 import Order from "../models/orderModel.js";
+import Customer from "../models/customerModel.js";
 
 const addOrder = async (
   customerId,
@@ -19,9 +20,31 @@ const addOrder = async (
 };
 
 const listOrdersByCustomer = async (id) => {
- 
-  const findCustomer = await Order.findOne({ where: id });
-  console.log("FindCustomer", findCustomer);
+  return await Order.findAll({ where: { customerId: id } });
 };
 
-export { addOrder, listOrdersByCustomer };
+const listOrdersByCustomerEmail = async (email) => {
+  return await Order.findAll({
+    include: [
+      {
+        model: Customer,
+        where: { email: email },
+        required: true,
+      },
+    ],
+  });
+};
+
+const listAllOrdersByEachCustomer = async () => {
+  const { customerId, bookId } = await Order.findAndCountAll({
+    where: {
+      title: {
+        [Op.like]: 'foo%'
+      }
+    },
+    offset: 10,
+    limit: 2
+  });
+}
+
+export { addOrder, listOrdersByCustomer, listOrdersByCustomerEmail };
